@@ -30,3 +30,7 @@
 #cmake build
 build
 Build
+
+#vim
+*.swp
+*.swo

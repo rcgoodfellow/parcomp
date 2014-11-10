@@ -9,6 +9,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SHARED_FLAGS} -stdlib=libc++ -std=c++1
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SHARED_FLAGS} -std=c11")
 
 include_directories(include)
+if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
+    include_directories(/usr/include/mpich)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
 
 add_library(par SHARED src/mpi.cxx src/prefix.cxx)
 target_link_libraries(par mpi)
