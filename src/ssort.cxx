@@ -1,6 +1,7 @@
 #include "ssort.hxx"
 
 using namespace par;
+using namespace std::chrono;
   
 SsortNode::SsortNode(mpi::Communicator comm, int N, std::vector<int> A)
   : comm{comm}, N{N}, A{A}
@@ -40,8 +41,11 @@ SsortNode::globalPivots()
 {
   int p = comm.size;
   std::vector<int> t_pivots(p*(p-1), 0);
+  auto start = high_resolution_clock::now();
   MPI_Allgather(l_pivots.data(), p-1, MPI_INT, t_pivots.data(), p-1, MPI_INT, 
                 MPI_COMM_WORLD);
+  auto end = high_resolution_clock::now();
+  comtime += duration_cast<microseconds>(end-start).count()/1000.0;
   sort(t_pivots.begin(), t_pivots.end());
   
   int partitions = 1;
@@ -83,10 +87,11 @@ SsortNode::chunkify()
   std::vector<int> rcv_dspl(p, 0);
   for(int i=1; i<p; ++i) rcv_dspl[i] = rcv_cnts[i-1] + rcv_dspl[i-1];
 
-  log << "AAA" << std::endl;
+  auto start = high_resolution_clock::now();
   MPI_Alltoallv(chunks.data(), sendcounts.data(), sdis.data(), MPI_INT,
       rcv.data(), rcv_cnts.data(), rcv_dspl.data(), MPI_INT, MPI_COMM_WORLD);
-  log << "BBB" << std::endl;
+  auto end = high_resolution_clock::now();
+  comtime += duration_cast<microseconds>(end-start).count()/1000.0;
 
   for(int x : rcv)
   {

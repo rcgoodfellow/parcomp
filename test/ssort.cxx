@@ -47,7 +47,8 @@ int main(int argc, char **argv) {
 
   if(comm.rank == 0) {
     ofstream time("ssort.time");
-    time << duration_cast<microseconds>(end-start).count()/1000.0 << std::flush;
+    time << duration_cast<microseconds>(end-start).count()/1000.0
+         << " " << sn.comtime << std::flush;
   }
   MPI_Barrier(MPI_COMM_WORLD);
 

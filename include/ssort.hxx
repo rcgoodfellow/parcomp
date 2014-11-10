@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include <chrono>
 
 namespace par {
 
@@ -21,6 +22,7 @@ class SsortNode {
     void chunkify();
     
     std::vector<int> S;
+    float comtime{0.0f};
 
   private:
     mpi::Communicator comm;
@@ -29,7 +31,6 @@ class SsortNode {
     std::ofstream log;
 
     void logVec(std::string msg, const std::vector<int> &v);
-
 
 };
 
