@@ -14,11 +14,15 @@ if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 
-add_library(par SHARED src/mpi.cxx src/prefix.cxx)
+add_library(par SHARED src/mpi.cxx src/prefix.cxx src/ssort.cxx)
 target_link_libraries(par mpi)
 
 add_executable(prefix_tests test/prefix.cxx)
 target_link_libraries(prefix_tests par)
 
+add_executable(ssort_tests test/ssort.cxx)
+target_link_libraries(ssort_tests par)
+
 configure_file(run_prefix_tests.pl run_prefix_tests.pl COPYONLY)
-configure_file(mpi_hosts mpi_hosts COPYONLY)
+configure_file(run_ssort_tests.pl run_ssort_tests.pl COPYONLY)
+configure_file(mpi_hosts_8x mpi_hosts COPYONLY)
